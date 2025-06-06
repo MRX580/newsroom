@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from unittest.mock import patch
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.conf import settings
 
 class StatsViewTest(TestCase):
     def setUp(self):
@@ -262,3 +263,13 @@ class StatsViewTest(TestCase):
         results = response.context['results']
         self.assertEqual(results[0]['tags'], "—")
         self.assertIn("Клиент", results[0]['clients'])
+
+class StatsViewLoginRequiredTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse('stats_view')
+
+    def test_stats_view_requires_login(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].startswith(settings.LOGIN_URL))
