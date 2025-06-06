@@ -13,9 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
 
 # Application definition
@@ -133,11 +133,13 @@ OIDC_REALM = os.getenv('OIDC_REALM')
 OIDC_RP_CLIENT_ID = os.getenv('OIDC_RP_CLIENT_ID')
 OIDC_RP_CLIENT_SECRET = os.getenv('OIDC_RP_CLIENT_SECRET')
 
-OIDC_OP_AUTHORIZATION_ENDPOINT = f"http://localhost:8080/realms/{OIDC_REALM}/protocol/openid-connect/auth"
-OIDC_OP_TOKEN_ENDPOINT = f"http://localhost:8080/realms/{OIDC_REALM}/protocol/openid-connect/token"
-OIDC_OP_USER_ENDPOINT = f"http://localhost:8080/realms/{OIDC_REALM}/protocol/openid-connect/userinfo"
-OIDC_OP_JWKS_ENDPOINT = f"http://localhost:8080/realms/{OIDC_REALM}/protocol/openid-connect/certs"
-OIDC_OP_LOGOUT_ENDPOINT = f"http://localhost:8080/realms/{OIDC_REALM}/protocol/openid-connect/logout"
+KC_HOST = os.getenv('KC_HOST', 'localhost:8080')
+
+OIDC_OP_AUTHORIZATION_ENDPOINT = f"http://{KC_HOST}/realms/{OIDC_REALM}/protocol/openid-connect/auth"
+OIDC_OP_TOKEN_ENDPOINT = f"http://{KC_HOST}/realms/{OIDC_REALM}/protocol/openid-connect/token"
+OIDC_OP_USER_ENDPOINT = f"http://{KC_HOST}/realms/{OIDC_REALM}/protocol/openid-connect/userinfo"
+OIDC_OP_JWKS_ENDPOINT = f"http://{KC_HOST}/realms/{OIDC_REALM}/protocol/openid-connect/certs"
+OIDC_OP_LOGOUT_ENDPOINT = f"http://{KC_HOST}/realms/{OIDC_REALM}/protocol/openid-connect/logout"
 
 AUTHENTICATION_BACKENDS = [
     'mozilla_django_oidc.auth.OIDCAuthenticationBackend',

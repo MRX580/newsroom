@@ -22,7 +22,7 @@ services:
       KC_DB_USERNAME: ${POSTGRES_USER}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
       KC_DB_PORT: 5432
-      KC_HOSTNAME: localhost
+      KC_HOSTNAME: ${KC_HOSTNAME:-localhost}
     ports:
       - "8080:8080"
     depends_on:
@@ -37,6 +37,8 @@ services:
       - "8000:8000"
     env_file:
       - .env
+    environment:
+      KC_HOST: keycloak:8080
     depends_on:
       - db
       - keycloak
