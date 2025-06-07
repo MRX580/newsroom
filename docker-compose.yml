@@ -43,5 +43,16 @@ services:
       - db
       - keycloak
 
+  nginx:
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./staticfiles:/app/staticfiles
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+
 volumes:
   postgres_data:
